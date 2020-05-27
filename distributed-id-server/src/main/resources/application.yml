@@ -1,0 +1,49 @@
+server:
+  port: 8080
+  undertow:
+    accesslog:
+      enabled: true
+      dir: ./logs
+      pattern: common
+      prefix: access_log
+      suffix: .log
+    io-threads: 4
+    worker-threads: 32
+    buffer-size: 1024
+    direct-buffers: true
+
+spring:
+  application:
+    name: distributed-id-service
+
+  datasource:
+    password:
+    url: jdbc:mysql://127.0.0.1:3306/distributed_id?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    minIdle: 5
+    # useGlobalDataSourceStat: true
+    validationQuery: SELECT 'x'
+    initialSize: 5
+    maxWait: 60000
+    filters: wall,stat,slf4j
+    poolPreparedStatements: true
+    type: com.alibaba.druid.pool.DruidDataSource
+    maxPoolPreparedStatementPerConnectionSize: 20
+    testOnBorrow: false
+    testWhileIdle: true
+    minEvictableIdleTimeMillis: 300000
+    timeBetweenEvictionRunsMillis: 60000
+    timeBetweenLogStatsMillis: 300000
+    testOnReturn: false
+    driver-class-name: com.mysql.jdbc.Driver
+    maxActive: 20
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+mybatis:
+  typeAliasesPackage: com.yx.distributed.id.core.model
+  configLocation: classpath:/mybatis-config.xml
